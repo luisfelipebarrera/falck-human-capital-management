@@ -1,0 +1,203 @@
+openapi: 3.0.0
+
+info:
+  title: FALK - Human Capital Management API
+  version: 1.0.0
+  description: |
+    Human Capital Management API
+    API reference for the FALK Human Capital Management API. 
+    This API allows you to manage employees and their information.
+    Authentication is based on JWT Bearer tokens.
+
+servers:
+  - url: http://localhost:8080
+
+tags:
+  - name: Authentication
+  - name: Employees
+
+paths:
+
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Authenticate a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        "200":
+          description: JWT generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+
+  /auth/refresh:
+    post:
+      tags:
+        - Authentication
+      summary: Refresh an access token
+      responses:
+        "200":
+          description: Token refreshed
+
+  /api/employees:
+    get:
+      tags:
+        - Employees
+      summary: Returns all employees
+      security:
+        - bearerAuth: [Employee.Read]
+      responses:
+        "200":
+          description: Employee list returned successfully          
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+
+    post:
+      tags:
+        - Employees
+      summary: Creates a new employee
+      security:
+        - bearerAuth: [Employee.Write]
+      responses:
+        "201":
+          description: Employee created
+
+  /api/employees/{id}:
+    get:
+      tags:
+        - Employees
+      summary: Returns an employee by ID
+      security:
+        - bearerAuth: [Employee.Read]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+        - name: page
+          in: query
+          description: Page number you wish to consult.
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          description: Maximum number of items per page.
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: Employee found
+
+    put:
+      tags:
+        - Employees
+      summary: Updates an employee
+      security:
+        - bearerAuth: [Employee.Write]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        "200":
+          description: Employee updated
+
+    delete:
+      tags:
+        - Employees
+      summary: Deletes an employee
+      security:
+        - bearerAuth: [Admin]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        "204":
+          description: Employee deleted
+
+components:
+
+  securitySchemes:
+
+    bearerAuth:
+      type: oauth2
+      flows:
+        password:
+          tokenUrl: /auth/login
+          scopes:
+            Employee.Read: Read employees
+            Employee.Write: Create or update employees
+            Admin: Delete employees
+
+  schemas:
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+
+    LoginResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        expiresIn:
+          type: integer
+        tokenType:
+          type: string
+          example: Bearer
+
+    EmployeeResponse:
+      type: object
+      properties:
+        employees:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+
+    Employee:
+      type: object
+      properties:
+        id:
+          type: number
+          format: int64
+          description: Unique identifier for the employee
+        name:
+          type: string
+          description: Full name of the employee
+        position:
+          type: string
+          description: Job position of the employee
+        salary:
+          type: number
+          format: float
+          description: Salary of the employee
