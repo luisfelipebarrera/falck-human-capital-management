@@ -32,9 +32,35 @@ dotnet add src/api-core/api-core.csproj reference src/application/application.cs
 
 # 5. Add projects to the soluciont
 dotnet sln add src/api-core/api-core.csproj
+dotnet sln add src/api-gateway/api-gateway.csproj
+dotnet sln add src/api-security/api-security.csproj
 # The other projects are added by transitivity
 # dotnet sln add src/domain/domain.csproj
 # dotnet sln add src/application/application.csproj
 # dotnet sln add src/infrastructure/infrastructure.csproj
+
+```
+
+Configure API Gateway
+
+```bash
+
+# APIs documentation with scalar
+dotnet add package Scalar.AspNetCore --project src/api-gateway/api-gateway.csproj
+```
+
+Running environment
+
+```bash
+dotnet clean src/api-gateway/api-gateway.csproj
+dotnet build src/api-gateway/api-gateway.csproj
+dotnet run --project src/api-gateway/api-gateway.csproj --launch-profile Development
+```
+
+API Gateway implementation
+
+```bash
+
+dotnet add src/api-gateway/api-gateway.csproj package Swashbuckle.AspNetCore
 
 ```

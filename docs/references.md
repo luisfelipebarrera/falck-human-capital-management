@@ -7,6 +7,8 @@
 ### Libraries & Dependencies
 
 - [Download .NET](https://dotnet.microsoft.com/download) - .NET is a free, cross-platform, open-source developer platform for building many different types of applications.
+- [Get started with Swashbuckle and ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/tutorials/getting-started-with-swashbuckle?view=aspnetcore-8.0&tabs=visual-studio) - 
+
 
 ### Tutorials & Articles
 

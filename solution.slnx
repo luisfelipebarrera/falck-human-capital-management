@@ -1,6 +1,8 @@
 <Solution>
   <Folder Name="/src/">
     <Project Path="src/api-core/api-core.csproj" />
+    <Project Path="src/api-gateway/api-gateway.csproj" />
+    <Project Path="src/api-security/api-security.csproj" />
     <Project Path="src/application/application.csproj" />
     <Project Path="src/domain/domain.csproj" />
     <Project Path="src/infrastructure/infrastructure.csproj" />
