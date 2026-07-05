@@ -37,3 +37,66 @@ The Flow of DependenciesDependencies always point inward toward the Domain layer
 - Testability: Domain logic can be easily unit-tested without mocking a database or server.
 - Flexibility: You can swap frameworks or databases (e.g., changing from MySQL to PostgreSQL) by simply creating a new Infrastructure adapter.
 - Maintainability: Clear separation of concerns makes the codebase easier to understand and evolve.
+
+### Target architecture
+
+Avoid coupling, each service owns its own domain.
+
+```bash
+api-core
+    Api
+    Application
+    Domain
+    Infrastructure
+
+api-security
+    Api
+    Application
+    Domain
+    Infrastructure
+
+api-gateway
+
+```
+
+## DDD
+
+### Agregates
+
+Position History only be modified through Employee.
+
+```bash
+
+# Example
+Employee
+│
+├── PositionHistory
+│
+├── ManagerAssignment
+│
+└── Salary
+```
+
+The behavior is exposed with the aggregates:
+
+- Employee
+- Id
+- Name
+- Salary
+- Current Position
+- Position History
+- Manager Assignments
+
+### Value Objects
+
+Salary
+Amount
+Position
+
+## Design Patterns
+
+
+To Assign Bonus Percent Prevent use of the condition if (role == manager)
+
+- Bonus Strategy: Define the bonus behavior for regular employees and managers.
+- Bonus Factory: 

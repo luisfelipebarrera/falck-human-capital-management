@@ -20,6 +20,21 @@ apis/
     open-api.yml
 
 src/
+    api-core
+        Api
+        Application
+        Domain
+            Aggregates
+            Entities
+            ValueObjects
+            DomainServices
+
+        Infrastructure
+            Persistence
+                Configurations
+                Repositories
+                Migrations
+                Seed
 
 tests/
 
