@@ -1,6 +1,6 @@
 # Implementing solution
 
-Commands to generate the archetype.
+## Commands to generate the archetype.
 
 ```bash
 
@@ -41,7 +41,7 @@ dotnet sln add src/api-security/api-security.csproj
 
 ```
 
-Configure API Gateway
+## Configure API Gateway
 
 ```bash
 
@@ -55,12 +55,15 @@ Running environment
 dotnet clean src/api-gateway/api-gateway.csproj
 dotnet build src/api-gateway/api-gateway.csproj
 dotnet run --project src/api-gateway/api-gateway.csproj --launch-profile Development
+
+dotnet clean src/api-security/api-security.csproj
+dotnet build src/api-security/api-security.csproj
+dotnet run --project src/api-security/api-security.csproj --launch-profile Development
 ```
 
-API Gateway implementation
+## Install dependencies
 
 ```bash
-
-dotnet add src/api-gateway/api-gateway.csproj package Swashbuckle.AspNetCore
-
+dotnet add package DotNetEnv --project src/api-security/api-security.csproj
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --project src/api-security/api-security.csproj
 ```

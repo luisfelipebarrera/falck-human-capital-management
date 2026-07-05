@@ -1,41 +1,55 @@
+using DotNetEnv;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+// 1. Cargar archivo .env en las variables de entorno del sistema operativo
+Env.Load();
+
+// 2. Mapear las variables de entorno sobre la configuración en memoria
+// Esto combina appsettings.json (MockUsers) con el .env (Jwt__)
+builder.Configuration.AddEnvironmentVariables();
+
+// 3. Configurar la autenticación JwtBearer utilizando la llave pública RSA
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        var publicKeyBase64 = builder.Configuration["Jwt:PublicKey"];
+
+        if (string.IsNullOrEmpty(publicKeyBase64))
+        {
+            throw new InvalidOperationException("La llave pública JWT no está configurada en el entorno.");
+        }
+
+        // Crear la instancia RSA e importar de forma segura
+        var rsaPublicKey = RSA.Create();
+        byte[] publicKeyBytes = Convert.FromBase64String(publicKeyBase64);
+
+        rsaPublicKey.ImportSubjectPublicKeyInfo(publicKeyBytes, out _);
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new RsaSecurityKey(rsaPublicKey),
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateLifetime = true
+        };
+    });
+
+// Agregar controladores al contenedor de dependencias
+builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+// Habilitar el middleware de autenticación y autorización en el pipeline
+app.UseAuthentication();
+app.UseAuthorization();
 
-app.UseHttpsRedirection();
-
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
-
-app.MapGet("/weatherforecast", () =>
-{
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

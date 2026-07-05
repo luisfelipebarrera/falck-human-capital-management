@@ -1,17 +1,32 @@
+using ApiGateway.Controllers;
+using ApiGateway.Middleware;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+string scalarTitle = builder.Configuration["Scalar:Title"] ?? "API Documentation";
+string apiSecurityUrl = builder.Configuration["Microservices:ApiSecurityUrl"] ?? "http://localhost:8081";
+
+builder.Services.AddControllers();
+
+builder.Services.AddHttpClient<IAuthenticationController, ApiGateway.Services.AuthenticationService>(client =>
+{
+    client.BaseAddress = new Uri(apiSecurityUrl);
+});
+
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+// Enabled native driver routing because there are controllers injected by NSwag interfaces
+app.MapControllers();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Staging"))
 {
     app.MapGet("/apis/open-api.yml", async (HttpContext context) =>
     {
-        // 1. Al usar <Link>, .NET creará la carpeta apis dentro del bin automáticamente
         var filePath = Path.Combine(AppContext.BaseDirectory, "apis", "open-api.yml");
 
-        // 2. Si estás ejecutando en modo debug local y no se ha copiado, 
-        // buscamos yendo dos niveles hacia atrás desde el directorio de trabajo actual
         if (!File.Exists(filePath))
         {
             filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "apis", "open-api.yml");
@@ -32,10 +47,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Staging"))
     app.MapScalarApiReference(options =>
     {
         options.WithOpenApiRoutePattern("/apis/open-api.yml");
-
         options.OpenApiRoutePattern = "/apis/open-api.yml";
-
-        string scalarTitle = builder.Configuration["Scalar:Title"] ?? "API Documentation";
         options.WithTitle(scalarTitle);
     });
 }
