@@ -9,14 +9,11 @@ public sealed record Position
 
     public string Name { get; }
 
-    public Position(
-        PositionType type,
-        string name)
+    public Position(PositionType type, string name)
     {
         if (string.IsNullOrWhiteSpace(name))
         {
-            throw new DomainException(
-                "Position name cannot be empty.");
+            throw new DomainException("Position name cannot be empty.");
         }
 
         Type = type;

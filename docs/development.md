@@ -77,3 +77,16 @@ dotnet add package DotNetEnv --project src/security/api/api.csproj
 dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --project src/security/api/api.csproj
 dotnet add package BCrypt.Net-Next --project src/security/api/api.csproj
 ```
+
+## Application layer
+
+```bash
+
+dotnet add package Microsoft.EntityFrameworkCore --project src/core/infrastructure/infrastructure.csproj
+dotnet add package Microsoft.EntityFrameworkCore.Sqlite --project src/core/infrastructure/infrastructure.csproj
+dotnet add package Microsoft.EntityFrameworkCore.Design --project src/core/infrastructure/infrastructure.csproj
+dotnet add package Microsoft.EntityFrameworkCore.Tools --project src/core/infrastructure/infrastructure.csproj
+dotnet add package Microsoft.Extensions.Configuration --project src/core/infrastructure/infrastructure.csproj
+dotnet add package Microsoft.Extensions.Configuration.Json --project src/core/infrastructure/infrastructure.csproj
+
+```

@@ -73,3 +73,11 @@ Jwt__Audience=https://falk-poc.com
 Jwt__PublicKey=MIICIjANBgkqhkiG...
 Jwt__PrivateKey=MIIJQwIBADANBgk...
 ```
+
+### Dependency chain
+
+Dependency chain to reach from the controller to the Employee aggregate
+
+```bash
+Controller --> Application --> Factory --> Strategy --> Employee
+```
