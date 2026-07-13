@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\security\security.csproj" />
+    <ProjectReference Include="..\..\shared\security\security.csproj" />
   </ItemGroup>
 
 </Project>

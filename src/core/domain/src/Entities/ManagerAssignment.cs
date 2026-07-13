@@ -1,28 +1,30 @@
 using Domain.Exceptions;
-using Domain.ValueObjects;
 
 namespace Domain.Entities;
 
-public class PositionHistory
+public class ManagerAssignment
 {
-    public int EmployeeId { get; }
+    public Guid Id { get; private set; } = Guid.CreateVersion7();
 
-    public Position Position { get; private set; }
+    public int ManagerId { get; private set; }
 
-    public DateTime StartDate { get; }
+    public DateTime StartDate { get; private set; }
 
     public DateTime? EndDate { get; private set; }
 
-    public PositionHistory(int employeeId, Position position, DateTime startDate)
+    public ManagerAssignment()
     {
-        if (startDate == default)
+    }
+
+    public ManagerAssignment(int managerId, DateTime startDate)
+    {
+        if (managerId <= 0)
         {
             throw new DomainException(
-                "Start date is required.");
+                "Manager id is invalid.");
         }
 
-        EmployeeId = employeeId;
-        Position = position;
+        ManagerId = managerId;
         StartDate = startDate;
     }
 
