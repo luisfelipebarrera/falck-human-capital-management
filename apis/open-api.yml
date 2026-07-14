@@ -37,14 +37,69 @@ paths:
               schema:
                 $ref: '#/components/schemas/LoginResponse'
 
-  /auth/refresh:
-    post:
+  /users:
+    get:
       tags:
-        - Authentication
-      summary: Refresh an access token
+        - Users
+      summary: List users
+      operationId: getUsers
+      security:
+        - bearerAuth: []
       responses:
         "200":
-          description: Token refreshed
+          description: Users list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+
+    post:
+      tags:
+        - Users
+      summary: Create user
+      operationId: createUser
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+
+  /users/{id}:
+    get:
+      tags:
+        - Users
+      summary: Get user by id
+      operationId: getUser
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "404":
+          description: User not found
 
   /api/employees:
     get:
@@ -175,6 +230,46 @@ components:
         tokenType:
           type: string
           example: Bearer
+
+    UserResponse:
+      type: object
+      required:
+        - id
+        - username
+        - role
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier of the user.
+          example: "7d8a5a8c-45d8-4a4e-91e7-59e0b7b8f9c4"
+        username:
+          type: string
+          description: User login name.
+          example: "admin"
+        role:
+          $ref: '#/components/schemas/Role'
+
+    CreateUserRequest:
+      type: object
+      required:
+        - username
+        - password
+        - role
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+          format: password
+        role:
+          $ref: '#/components/schemas/Role'
+
+    Role:
+      type: string
+      enum:
+        - Admin
+        - Employee.Read
 
     EmployeeResponse:
       type: object

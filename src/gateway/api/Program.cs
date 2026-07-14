@@ -29,7 +29,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Staging"))
 
         if (!File.Exists(filePath))
         {
-            filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "apis", "open-api.yml");
+            filePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", "..", "apis", "open-api.yml");
         }
 
         if (!File.Exists(filePath))

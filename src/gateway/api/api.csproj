@@ -14,7 +14,7 @@
 
     <!-- copy open api yml file into output directory. -->
   <ItemGroup>
-    <None Update="../../apis/open-api.yml">
+    <None Update="../../../../apis/open-api.yml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

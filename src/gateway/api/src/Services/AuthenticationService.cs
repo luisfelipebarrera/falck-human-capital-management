@@ -26,10 +26,5 @@ namespace ApiGateway.Services
             return result ?? new LoginResponse();
         }
 
-        public async Task RefreshAsync()
-        {
-            var response = await _httpClient.PostAsync("auth/refresh", null);
-            response.EnsureSuccessStatusCode();
-        }
     }
 }

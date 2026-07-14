@@ -37,14 +37,6 @@ namespace ApiGateway.Controllers
 
         System.Threading.Tasks.Task<LoginResponse> LoginAsync(LoginRequest body);
 
-        /// <summary>
-        /// Refresh an access token
-        /// </summary>
-
-        /// <returns>Token refreshed</returns>
-
-        System.Threading.Tasks.Task RefreshAsync();
-
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -68,15 +60,81 @@ namespace ApiGateway.Controllers
             return _implementation.LoginAsync(body);
         }
 
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public interface IUsersController
+    {
+
         /// <summary>
-        /// Refresh an access token
+        /// List users
         /// </summary>
-        /// <returns>Token refreshed</returns>
-        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("auth/refresh")]
-        public System.Threading.Tasks.Task Refresh()
+
+        /// <returns>Users list</returns>
+
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserResponse>> GetUsersAsync();
+
+        /// <summary>
+        /// Create user
+        /// </summary>
+
+
+        /// <returns>User created</returns>
+
+        System.Threading.Tasks.Task<UserResponse> CreateUserAsync(CreateUserRequest body);
+
+        /// <summary>
+        /// Get user by id
+        /// </summary>
+
+
+        /// <returns>User found</returns>
+
+        System.Threading.Tasks.Task<UserResponse> GetUserAsync(System.Guid id);
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UsersController : Microsoft.AspNetCore.Mvc.ControllerBase
+    {
+        private IUsersController _implementation;
+
+        public UsersController(IUsersController implementation)
+        {
+            _implementation = implementation;
+        }
+
+        /// <summary>
+        /// List users
+        /// </summary>
+        /// <returns>Users list</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("users")]
+        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserResponse>> GetUsers()
         {
 
-            return _implementation.RefreshAsync();
+            return _implementation.GetUsersAsync();
+        }
+
+        /// <summary>
+        /// Create user
+        /// </summary>
+        /// <returns>User created</returns>
+        [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("users")]
+        public System.Threading.Tasks.Task<UserResponse> CreateUser([Microsoft.AspNetCore.Mvc.FromBody] CreateUserRequest body)
+        {
+
+            return _implementation.CreateUserAsync(body);
+        }
+
+        /// <summary>
+        /// Get user by id
+        /// </summary>
+        /// <returns>User found</returns>
+        [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("users/{id}")]
+        public System.Threading.Tasks.Task<UserResponse> GetUser(System.Guid id)
+        {
+
+            return _implementation.GetUserAsync(id);
         }
 
     }
@@ -247,6 +305,80 @@ namespace ApiGateway.Controllers
             get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
             set { _additionalProperties = value; }
         }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UserResponse
+    {
+
+        /// <summary>
+        /// Unique identifier of the user.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public System.Guid Id { get; set; }
+
+        /// <summary>
+        /// User login name.
+        /// </summary>
+        [System.Text.Json.Serialization.JsonPropertyName("username")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Username { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("role")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Role>))]
+        public Role Role { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CreateUserRequest
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("username")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Username { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("password")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        public string Password { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("role")]
+        [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
+        [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Role>))]
+        public Role Role { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public enum Role
+    {
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Admin")]
+        Admin = 0,
+
+        [System.Runtime.Serialization.EnumMember(Value = @"Employee.Read")]
+        Employee_Read = 1,
 
     }
 

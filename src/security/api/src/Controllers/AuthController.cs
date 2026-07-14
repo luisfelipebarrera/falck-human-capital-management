@@ -23,11 +23,21 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("login")]
-    public IActionResult Login(Models.Requests.LoginRequest request)
+    [ProducesResponseType<LoginResponse>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+    public ActionResult<LoginResponse> Login(LoginRequest request)
     {
         var user = _userService.Authenticate(
             request.Username,
             request.Password);
+
+        if (user is null)
+        {
+            return Unauthorized(new
+            {
+                message = "Invalid username or password."
+            });
+        }
 
         var token = _jwt.Generate(user);
 
@@ -35,7 +45,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("users")]
-    public IActionResult Create(CreateUserRequest request)
+    public ActionResult<UserResponse> Create(CreateUserRequest request)
     {
         var user = _userService.Create(request);
 
