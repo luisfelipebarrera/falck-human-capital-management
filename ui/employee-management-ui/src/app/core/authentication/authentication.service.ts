@@ -25,6 +25,7 @@ export class AuthenticationService {
   private readonly http = inject(HttpClient);
 
   private readonly tokenStorage = inject(TokenStorageService);
+  
   private readonly currentUserService = inject(CurrentUserService);
 
   login(request: LoginRequest): Observable<LoginResponse> {

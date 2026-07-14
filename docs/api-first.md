@@ -18,7 +18,7 @@ dotnet tool install -g NSwag.ConsoleCore
 
 # i.e. generate controllers in api-gateway from open-api.yml
 # In the NSwag command, use the /jsonLibrary:SystemTextJson parameter to avoid dragging along old third-party dependencies.
-nswag openapi2cscontroller /input:"apis/open-api.yml" /output:"src/api-gateway/Controllers/ApiEmployeeHcm.cs" /className:"{controller}" /namespace:"ApiGateway.Controllers" /controllerBaseClass:"Microsoft.AspNetCore.Mvc.ControllerBase" /jsonLibrary:"SystemTextJson" /operationGenerationMode:"MultipleClientsFromFirstTagAndOperationId"
+nswag openapi2cscontroller /input:"apis/open-api.yml" /output:"src/gateway/api/src/Controllers/ApiEmployeeHcm.cs" /className:"{controller}" /namespace:"ApiGateway.Controllers" /controllerBaseClass:"Microsoft.AspNetCore.Mvc.ControllerBase" /jsonLibrary:"SystemTextJson" /operationGenerationMode:"MultipleClientsFromFirstTagAndOperationId"
 
 
 ```

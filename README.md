@@ -81,3 +81,28 @@ Dependency chain to reach from the controller to the Employee aggregate
 ```bash
 Controller --> Application --> Factory --> Strategy --> Employee
 ```
+
+### Running environment
+
+Generate controller from Open API (API First)
+
+```bash
+nswag openapi2cscontroller /input:"apis/open-api.yml" /output:"src/gateway/api/src/Controllers/ApiEmployeeHcm.cs" /className:"{controller}" /namespace:"ApiGateway.Controllers" /controllerBaseClass:"Microsoft.AspNetCore.Mvc.ControllerBase" /jsonLibrary:"SystemTextJson" /operationGenerationMode:"MultipleClientsFromFirstTagAndOperationId"
+```
+
+```bash
+dotnet clean src/gateway/api/api.csproj
+dotnet build src/gateway/api/api.csproj
+dotnet run --project src/gateway/api/api.csproj --launch-profile Development
+
+dotnet clean src/security/api/api.csproj
+dotnet build src/security/api/api.csproj
+dotnet run --project src/security/api/api.csproj --launch-profile Development
+```
+
+Users
+
+| Username | Password         | Role         |
+| :------- | :--------------- | :----------- |
+| admin    | SuperPassword123 | Admin        |
+| user     | UserPassword123  | EmployeeRead |
