@@ -43,17 +43,30 @@ paths:
         - Users
       summary: List users
       operationId: getUsers
+
       security:
         - bearerAuth: []
+
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+
       responses:
         "200":
-          description: Users list
+          description: Paged users
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/UserResponse"
+                $ref: "#/components/schemas/UserPagedResponse"
 
     post:
       tags:
@@ -103,43 +116,13 @@ paths:
 
   /api/employees:
     get:
+      operationId: getEmployees
       tags:
         - Employees
       summary: Returns all employees
       security:
         - bearerAuth: [Employee.Read]
-      responses:
-        "200":
-          description: Employee list returned successfully          
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmployeeResponse'
-
-    post:
-      tags:
-        - Employees
-      summary: Creates a new employee
-      security:
-        - bearerAuth: [Employee.Write]
-      responses:
-        "201":
-          description: Employee created
-
-  /api/employees/{id}:
-    get:
-      tags:
-        - Employees
-      summary: Returns an employee by ID
-      security:
-        - bearerAuth: [Employee.Read]
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: number
-            format: int64
         - name: page
           in: query
           description: Page number you wish to consult.
@@ -156,9 +139,44 @@ paths:
             default: 10
       responses:
         "200":
+          description: Employee list returned successfully          
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeResponse'
+
+    post:
+      operationId: createEmployee
+      tags:
+        - Employees
+      summary: Creates a new employee
+      security:
+        - bearerAuth: [Employee.Write]
+      responses:
+        "201":
+          description: Employee created
+
+  /api/employees/{id}:
+    get:
+      operationId: getEmployee
+      tags:
+        - Employees
+      summary: Returns an employee by ID
+      security:
+        - bearerAuth: [Employee.Read]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: number
+            format: int64
+      responses:
+        "200":
           description: Employee found
 
     put:
+      operationId: updateEmployee
       tags:
         - Employees
       summary: Updates an employee
@@ -176,6 +194,7 @@ paths:
           description: Employee updated
 
     delete:
+      operationId: deleteEmployee
       tags:
         - Employees
       summary: Deletes an employee
@@ -246,9 +265,33 @@ components:
         username:
           type: string
           description: User login name.
-          example: "admin"
-        role:
-          $ref: '#/components/schemas/Role'
+          example: "admin"        
+        roles:
+          type: array
+          items:
+            type: string
+          description: User role or permission assigned to the user.
+          example: 
+            - "Employee.Read"
+
+    UserPagedResponse:
+      type: object
+      required:
+        - items
+        - total
+        - page
+        - limit
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserResponse'
+        total:
+          type: integer
+        page:
+          type: integer
+        limit:
+          type: integer
 
     CreateUserRequest:
       type: object
@@ -262,14 +305,19 @@ components:
         password:
           type: string
           format: password
-        role:
-          $ref: '#/components/schemas/Role'
-
-    Role:
-      type: string
-      enum:
-        - Admin
-        - Employee.Read
+        roles:
+          type: array
+          items:
+            type: string
+            minLength: 1
+            maxLength: 100
+            description: Role or permission assigned to the user.          
+          example: 
+              - Admin
+              - Employee.Read
+              - Employee.Write
+              - Manager
+              - HumanResources
 
     EmployeeResponse:
       type: object

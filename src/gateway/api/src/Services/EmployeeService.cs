@@ -11,31 +11,28 @@ public sealed class EmployeesService : IEmployeesController
         _httpClient = httpClient;
     }
 
-    public async Task<EmployeeResponse> EmployeesGETAsync()
+    public Task CreateEmployeeAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task DeleteEmployeeAsync(double id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task GetEmployeeAsync(double id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<EmployeeResponse> GetEmployeesAsync(int page, int limit)
     {
         return (await _httpClient.GetFromJsonAsync<EmployeeResponse>(
             "/api/employees"))!;
     }
 
-    public async Task EmployeesPOSTAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task EmployeesGET2Async(
-        double id,
-        int page,
-        int limit)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task EmployeesPUTAsync(double id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public async Task EmployeesDELETEAsync(double id)
+    public Task UpdateEmployeeAsync(double id)
     {
         throw new NotImplementedException();
     }

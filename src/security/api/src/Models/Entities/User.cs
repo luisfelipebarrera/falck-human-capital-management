@@ -10,14 +10,14 @@ public class User
 
     public string PasswordHash { get; private set; } = string.Empty;
 
-    public string Role { get; init; } = Roles.EmployeeRead;
+    public IReadOnlyCollection<string> Roles { get; init; } = [];
 
-    public User(Guid id, string username, string passwordHash, string role)
+    public User(Guid id, string username, string passwordHash, IEnumerable<string> roles)
     {
         Id = id;
         Username = username;
         PasswordHash = passwordHash;
-        Role = role;
+        Roles = roles.ToList().AsReadOnly();
     }
 
     public bool VerifyPassword(string password)

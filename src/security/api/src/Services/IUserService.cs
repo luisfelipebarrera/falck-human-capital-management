@@ -10,4 +10,6 @@ public interface IUserService
     User Create(CreateUserRequest request);
 
     IReadOnlyCollection<User> GetAll();
+
+    User? GetById(Guid id);
 }

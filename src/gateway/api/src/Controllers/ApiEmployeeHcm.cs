@@ -70,9 +70,10 @@ namespace ApiGateway.Controllers
         /// List users
         /// </summary>
 
-        /// <returns>Users list</returns>
 
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserResponse>> GetUsersAsync();
+        /// <returns>Paged users</returns>
+
+        System.Threading.Tasks.Task<UserPagedResponse> GetUsersAsync(int page, int limit);
 
         /// <summary>
         /// Create user
@@ -107,12 +108,12 @@ namespace ApiGateway.Controllers
         /// <summary>
         /// List users
         /// </summary>
-        /// <returns>Users list</returns>
+        /// <returns>Paged users</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("users")]
-        public System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserResponse>> GetUsers()
+        public System.Threading.Tasks.Task<UserPagedResponse> GetUsers([Microsoft.AspNetCore.Mvc.FromQuery] int? page, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit)
         {
 
-            return _implementation.GetUsersAsync();
+            return _implementation.GetUsersAsync(page ?? 1, limit ?? 10);
         }
 
         /// <summary>
@@ -147,9 +148,13 @@ namespace ApiGateway.Controllers
         /// Returns all employees
         /// </summary>
 
+        /// <param name="page">Page number you wish to consult.</param>
+
+        /// <param name="limit">Maximum number of items per page.</param>
+
         /// <returns>Employee list returned successfully</returns>
 
-        System.Threading.Tasks.Task<EmployeeResponse> EmployeesGETAsync();
+        System.Threading.Tasks.Task<EmployeeResponse> GetEmployeesAsync(int page, int limit);
 
         /// <summary>
         /// Creates a new employee
@@ -157,20 +162,16 @@ namespace ApiGateway.Controllers
 
         /// <returns>Employee created</returns>
 
-        System.Threading.Tasks.Task EmployeesPOSTAsync();
+        System.Threading.Tasks.Task CreateEmployeeAsync();
 
         /// <summary>
         /// Returns an employee by ID
         /// </summary>
 
 
-        /// <param name="page">Page number you wish to consult.</param>
-
-        /// <param name="limit">Maximum number of items per page.</param>
-
         /// <returns>Employee found</returns>
 
-        System.Threading.Tasks.Task EmployeesGET2Async(double id, int page, int limit);
+        System.Threading.Tasks.Task GetEmployeeAsync(double id);
 
         /// <summary>
         /// Updates an employee
@@ -179,7 +180,7 @@ namespace ApiGateway.Controllers
 
         /// <returns>Employee updated</returns>
 
-        System.Threading.Tasks.Task EmployeesPUTAsync(double id);
+        System.Threading.Tasks.Task UpdateEmployeeAsync(double id);
 
         /// <summary>
         /// Deletes an employee
@@ -188,7 +189,7 @@ namespace ApiGateway.Controllers
 
         /// <returns>Employee deleted</returns>
 
-        System.Threading.Tasks.Task EmployeesDELETEAsync(double id);
+        System.Threading.Tasks.Task DeleteEmployeeAsync(double id);
 
     }
 
@@ -205,12 +206,14 @@ namespace ApiGateway.Controllers
         /// <summary>
         /// Returns all employees
         /// </summary>
+        /// <param name="page">Page number you wish to consult.</param>
+        /// <param name="limit">Maximum number of items per page.</param>
         /// <returns>Employee list returned successfully</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/employees")]
-        public System.Threading.Tasks.Task<EmployeeResponse> EmployeesGET()
+        public System.Threading.Tasks.Task<EmployeeResponse> GetEmployees([Microsoft.AspNetCore.Mvc.FromQuery] int? page, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit)
         {
 
-            return _implementation.EmployeesGETAsync();
+            return _implementation.GetEmployeesAsync(page ?? 1, limit ?? 10);
         }
 
         /// <summary>
@@ -218,23 +221,21 @@ namespace ApiGateway.Controllers
         /// </summary>
         /// <returns>Employee created</returns>
         [Microsoft.AspNetCore.Mvc.HttpPost, Microsoft.AspNetCore.Mvc.Route("api/employees")]
-        public System.Threading.Tasks.Task EmployeesPOST()
+        public System.Threading.Tasks.Task CreateEmployee()
         {
 
-            return _implementation.EmployeesPOSTAsync();
+            return _implementation.CreateEmployeeAsync();
         }
 
         /// <summary>
         /// Returns an employee by ID
         /// </summary>
-        /// <param name="page">Page number you wish to consult.</param>
-        /// <param name="limit">Maximum number of items per page.</param>
         /// <returns>Employee found</returns>
         [Microsoft.AspNetCore.Mvc.HttpGet, Microsoft.AspNetCore.Mvc.Route("api/employees/{id}")]
-        public System.Threading.Tasks.Task EmployeesGET2(double id, [Microsoft.AspNetCore.Mvc.FromQuery] int? page, [Microsoft.AspNetCore.Mvc.FromQuery] int? limit)
+        public System.Threading.Tasks.Task GetEmployee(double id)
         {
 
-            return _implementation.EmployeesGET2Async(id, page ?? 1, limit ?? 10);
+            return _implementation.GetEmployeeAsync(id);
         }
 
         /// <summary>
@@ -242,10 +243,10 @@ namespace ApiGateway.Controllers
         /// </summary>
         /// <returns>Employee updated</returns>
         [Microsoft.AspNetCore.Mvc.HttpPut, Microsoft.AspNetCore.Mvc.Route("api/employees/{id}")]
-        public System.Threading.Tasks.Task EmployeesPUT(double id)
+        public System.Threading.Tasks.Task UpdateEmployee(double id)
         {
 
-            return _implementation.EmployeesPUTAsync(id);
+            return _implementation.UpdateEmployeeAsync(id);
         }
 
         /// <summary>
@@ -253,10 +254,10 @@ namespace ApiGateway.Controllers
         /// </summary>
         /// <returns>Employee deleted</returns>
         [Microsoft.AspNetCore.Mvc.HttpDelete, Microsoft.AspNetCore.Mvc.Route("api/employees/{id}")]
-        public System.Threading.Tasks.Task EmployeesDELETE(double id)
+        public System.Threading.Tasks.Task DeleteEmployee(double id)
         {
 
-            return _implementation.EmployeesDELETEAsync(id);
+            return _implementation.DeleteEmployeeAsync(id);
         }
 
     }
@@ -330,6 +331,34 @@ namespace ApiGateway.Controllers
         [System.ComponentModel.DataAnnotations.Required(AllowEmptyStrings = true)]
         [System.Text.Json.Serialization.JsonConverter(typeof(System.Text.Json.Serialization.JsonStringEnumConverter<Role>))]
         public Role Role { get; set; }
+
+        private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
+
+        [System.Text.Json.Serialization.JsonExtensionData]
+        public System.Collections.Generic.IDictionary<string, object> AdditionalProperties
+        {
+            get { return _additionalProperties ?? (_additionalProperties = new System.Collections.Generic.Dictionary<string, object>()); }
+            set { _additionalProperties = value; }
+        }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.7.1.0 (NJsonSchema v11.6.1.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UserPagedResponse
+    {
+
+        [System.Text.Json.Serialization.JsonPropertyName("items")]
+        [System.ComponentModel.DataAnnotations.Required]
+        public System.Collections.Generic.List<UserResponse> Items { get; set; } = new System.Collections.Generic.List<UserResponse>();
+
+        [System.Text.Json.Serialization.JsonPropertyName("total")]
+        public int Total { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("page")]
+        public int Page { get; set; }
+
+        [System.Text.Json.Serialization.JsonPropertyName("limit")]
+        public int Limit { get; set; }
 
         private System.Collections.Generic.IDictionary<string, object> _additionalProperties;
 

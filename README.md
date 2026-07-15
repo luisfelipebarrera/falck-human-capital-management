@@ -93,16 +93,41 @@ nswag openapi2cscontroller /input:"apis/open-api.yml" /output:"src/gateway/api/s
 ```bash
 dotnet clean src/gateway/api/api.csproj
 dotnet build src/gateway/api/api.csproj
-dotnet run --project src/gateway/api/api.csproj --launch-profile Development
+dotnet run --project src/gateway/api/api.csproj --launch-profile Development 
 
 dotnet clean src/security/api/api.csproj
 dotnet build src/security/api/api.csproj
-dotnet run --project src/security/api/api.csproj --launch-profile Development
+dotnet run --project src/security/api/api.csproj --launch-profile Development 
+
 ```
 
-Users
+_Test APIs_
+
+For quick tests, use [Scalar](http://localhost:8080/scalar/) in your browser
+
+Hardcoded Users
 
 | Username | Password         | Role         |
 | :------- | :--------------- | :----------- |
 | admin    | SuperPassword123 | Admin        |
 | user     | UserPassword123  | EmployeeRead |
+
+Example for Windows Powershell
+
+```bash
+
+# Authenticate
+
+$headers = @{
+    "Accept" = "application/json"
+    "Content-Type" = "application/json"
+}
+
+$body = @{
+    username = "admin"
+    password = "SuperPassword123"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "http://localhost:8080/auth/login" -Method Post -Headers $headers -Body $body
+
+```

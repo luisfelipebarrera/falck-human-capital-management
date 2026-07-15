@@ -1,17 +1,29 @@
 using ApiGateway.Controllers;
 using ApiGateway.Middleware;
 using Scalar.AspNetCore;
+using ApiGateway.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 string scalarTitle = builder.Configuration["Scalar:Title"] ?? "API Documentation";
 string apiSecurityUrl = builder.Configuration["Microservices:ApiSecurityUrl"] ?? "http://localhost:8081";
+string apiCoreUrl = builder.Configuration["Microservices:ApiCoreUrl"] ?? "http://localhost:8082";
 
 builder.Services.AddControllers();
 
-builder.Services.AddHttpClient<IAuthenticationController, ApiGateway.Services.AuthenticationService>(client =>
+builder.Services.AddHttpClient<IAuthenticationController, AuthenticationService>(client =>
 {
     client.BaseAddress = new Uri(apiSecurityUrl);
+});
+
+builder.Services.AddHttpClient<IUsersController, UsersService>(client =>
+{
+    client.BaseAddress = new Uri(apiSecurityUrl);
+});
+
+builder.Services.AddHttpClient<IEmployeesController, EmployeesService>(client =>
+{
+    client.BaseAddress = new Uri(apiCoreUrl);
 });
 
 var app = builder.Build();

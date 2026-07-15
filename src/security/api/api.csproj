@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\shared\security\security.csproj" />
+    <ProjectReference Include="..\..\shared\contracts\contracts.csproj" />
   </ItemGroup>
 
 </Project>
