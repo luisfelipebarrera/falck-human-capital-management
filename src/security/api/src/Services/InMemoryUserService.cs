@@ -16,12 +16,19 @@ public sealed class INMemoryUserService : IUserService
                 Guid.NewGuid(),
                 "admin",
                 BCrypt.Net.BCrypt.HashPassword("SuperPassword123"),
-                Roles.Admin),
+                [
+                    Roles.Admin,
+                    Roles.EmployeeRead,
+                    Roles.EmployeeWrite,
+                    Roles.EmployeeDelete
+                ]),
             new User(
                 Guid.NewGuid(),
                 "user",
                 BCrypt.Net.BCrypt.HashPassword("UserPassword123"),
-                Roles.EmployeeRead),
+                [
+                    Roles.EmployeeRead
+                ]),
         ];
     }
 
@@ -57,6 +64,11 @@ public sealed class INMemoryUserService : IUserService
     public IReadOnlyCollection<User> GetAll()
     {
         return _users.AsReadOnly();
+    }
+
+    public User? GetById(Guid id)
+    {
+        return _users.FirstOrDefault(u => u.Id == id);
     }
 }
 

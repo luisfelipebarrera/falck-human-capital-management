@@ -10,6 +10,9 @@
   </Folder>
   <Folder Name="/src/security/">
     <Project Path="src/security/api/api.csproj" />
+  </Folder>
+  <Folder Name="/src/shared/">
+    <Project Path="src/shared/contracts/contracts.csproj" />
     <Project Path="src/shared/security/security.csproj" />
   </Folder>
 </Solution>

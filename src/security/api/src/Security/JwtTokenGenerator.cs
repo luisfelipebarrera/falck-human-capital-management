@@ -67,19 +67,21 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
     private static ClaimsIdentity CreateClaims(User user)
     {
-        return new ClaimsIdentity(
-        [
-            new Claim(
+        var claims = new List<Claim>
+        {
+            new(
                 ClaimTypes.NameIdentifier,
                 user.Id.ToString()),
 
-            new Claim(
+            new(
                 ClaimTypes.Name,
-                user.Username),
+                user.Username)
+        };
 
-            new Claim(
-                ClaimTypes.Role,
-                user.Role.ToString())
-        ]);
+        claims.AddRange(
+            user.Roles.Select(role =>
+                new Claim(ClaimTypes.Role, role)));
+
+        return new ClaimsIdentity(claims);
     }
 }

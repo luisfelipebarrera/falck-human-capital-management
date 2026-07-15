@@ -1,4 +1,4 @@
-namespace ApiSecurity.Models.Responses;
+namespace Contracts.Responses;
 
 public class LoginResponse
 {

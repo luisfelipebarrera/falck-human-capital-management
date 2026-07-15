@@ -1,4 +1,4 @@
-namespace ApiSecurity.Models.Responses;
+namespace Contracts.Responses;
 
 public class UserResponse
 {
@@ -6,5 +6,5 @@ public class UserResponse
 
     public string Username { get; init; } = string.Empty;
 
-    public string Role { get; init; } = string.Empty;
+    public IReadOnlyCollection<string> Roles { get; init; } = [];
 }

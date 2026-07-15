@@ -11,11 +11,10 @@ public sealed class UsersService : IUsersController
         _httpClient = httpClient;
     }
 
-    public async Task<ICollection<UserResponse>> GetUsersAsync()
+    public async Task<UserPagedResponse> GetUsersAsync(int page, int limit)
     {
-        return await _httpClient.GetFromJsonAsync<List<UserResponse>>(
-                   "/users")
-               ?? [];
+        return (await _httpClient.GetFromJsonAsync<UserPagedResponse>(
+            $"/users?page={page}&limit={limit}"))!;
     }
 
     public async Task<UserResponse> GetUserAsync(Guid id)
@@ -40,4 +39,5 @@ public sealed class UsersService : IUsersController
         return (await response.Content
             .ReadFromJsonAsync<UserResponse>())!;
     }
+
 }

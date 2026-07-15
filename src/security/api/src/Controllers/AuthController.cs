@@ -1,5 +1,5 @@
 using ApiSecurity.Models.Requests;
-using ApiSecurity.Models.Responses;
+using Contracts.Responses;
 using ApiSecurity.Security;
 using ApiSecurity.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +14,7 @@ public class AuthController : ControllerBase
 
     private readonly IJwtTokenGenerator _jwt;
 
-    public AuthController(
-        IUserService userService,
-        IJwtTokenGenerator jwt)
+    public AuthController(IUserService userService, IJwtTokenGenerator jwt)
     {
         _userService = userService;
         _jwt = jwt;
